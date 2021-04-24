@@ -9,6 +9,7 @@ export type County = {
     wealth: number;
 
     isActive: boolean;
+    neighbours: County[];
 }
 
 export type Field ={
@@ -42,4 +43,9 @@ export type Combat = {
 
 export type GameMap = {
     fields: County[];
+}
+
+export type Color = {
+    main: string;
+    second: string;
 }

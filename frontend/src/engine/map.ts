@@ -1,13 +1,11 @@
 import {Field} from './types';
 
-const PLAYER_START_FIELDS_NUMBER = 5;
+const PLAYER_START_FIELDS_NUMBER = 4;
 
 type PlayerCount = {
     fields: number;
     id: number;
 }
-
-
 
 const default_field: Field = {
     id: null,
@@ -21,20 +19,19 @@ const default_tiles:    (boolean| number)[][] = [
     [2,false,false,false,false,false],
     [false,false,false,false,false],
     [2,false,false,false,false,false],
+    [false,false,false,false,false],
+    [2,false,false,false,false,false],
     [2,false,2,false,2],
 ]
 
 const preparedMap: Field[][] = default_tiles.map( (row, i) => row.map( (tile, y) => (typeof(tile) === 'boolean' ? {...default_field, id: (String(i) + String(y)), isActive: true} : {...default_field, id: (String(i) + String(y))})) )
-console.log(preparedMap)
+
 const checkIfPlayerCanHaveMoreFields = (fields: number) => {
     return fields < PLAYER_START_FIELDS_NUMBER;
 }
 
 const random = (): boolean => {
-    const tmp = ( Math.floor(Math.random() * 10) > 8 ? true : false)
-    console.log("________________tmp______________");
-    console.log(tmp);
-    return tmp;
+    return ( Math.floor(Math.random() * 10) > 8 ? true : false);
 }
 
 const prepareField = (neighbours: Field[], current: Field, ownerId: number): void => {
@@ -63,19 +60,11 @@ export const generateMap = (players_count: number): Field[][] => {
     for( let y = 0; y < default_tiles.length; y++){
 
         const current_tile_row: Field[] = preparedMap[y];
-        console.log("%c current_tile_row", "background: blue;")
-        console.log(current_tile_row)
-
         for( let k = 0; k < current_tile_row.length; k++){
 
 
             if(currentPlayer <= players_count){
                 if(checkIfPlayerCanHaveMoreFields(playersState[currentPlayer].fields)){
-                    console.log("%c DOING ITERATION: [" + y + "]" + "[" + k + "]" + " PLAYER: " + currentPlayer , "background: red; color: aqua")
-                    console.log("player: " + currentPlayer,"row: " + y, "column: " + k)
-                    console.log(preparedMap)
-                    console.log("PLAYERS STATE")
-                    console.log(playersState)
 
                     const neighbours: Field[] = [];
 
@@ -112,8 +101,7 @@ export const generateMap = (players_count: number): Field[][] => {
 
 
                     prepareField( neighbours.filter( n => n), preparedMap[y][k], currentPlayer)
-                    console.log("______PREPARED MAP_____")
-                    console.log(preparedMap);
+
                     if(preparedMap[y][k].isCounty){
                         playersState[currentPlayer].fields += 1;
                     }
@@ -124,36 +112,5 @@ export const generateMap = (players_count: number): Field[][] => {
             }
         }
         }
-    console.log("preparedMap")
-    console.log(preparedMap)
     return preparedMap;
 }
-
-
-/*
-
-        for( let y = 0; y < (default_tiles.length - 1); y++){
-            const current_tile_row: Field[] = preparedMap[y];
-            console.log(current_tile_row)
-        }
-
-            for( let k = 0; k < (current_tile_row.length - 1 ); k++){
-                const neighbours: Field[] = [
-                        preparedMap[y][k+1],
-
-                        preparedMap[y+1][k],
-                        preparedMap[y+1][k+1]];
-                if( y > 0 && k > 0 ){
-                    neighbours.push(
-                        preparedMap[y][k-1],
-                        preparedMap[y-1][k-1],
-                        preparedMap[y+1][k-1],
-                        preparedMap[y-1][k],
-                        preparedMap[y-1][k+1])
-                }
-
-                prepareField(neighbours, preparedMap[y][k])
-            }
-
-
-*/

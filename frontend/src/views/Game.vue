@@ -5,7 +5,7 @@
     <div class="map__container" v-for="row in map" :key="row">
             <span  v-for="tile in row" :key="tile">
                 <span v-if="tile.isCounty">
-                  <img class="tile_img" src="../assets/countyfield.svg"/>
+                  <CountyTile :main="colors[tile.owner].main" :second="colors[tile.owner].second"/>
                 </span>
                 <span v-else>
                   <img src="../assets/blanktile.svg"/>
@@ -20,17 +20,19 @@
 import { Options, Vue } from "vue-class-component";
 import Map from "../components/game/Map.vue";
 import { generateMap } from '../engine/map'
-import {Field} from '../engine/types';
+import CountyTile from "@/assets/CountyTile.vue"; // @ is an alias to /src
 
 @Options({
   components: {
     Map,
+    CountyTile
   }
 })
 export default class Home extends Vue {
   data(){
     return {
-      map: generateMap(2)
+      map: generateMap(3),
+      colors: [{main: "#6CFFCA", second: "#008E64"} ,{main: "#FF6CF0", second: "#A30A93"}, {main: "#FFC46C", second: "#8B5402"}, {main: "#FF4646", second: "#7A0404"}]
     }
   }
   mounted(){
