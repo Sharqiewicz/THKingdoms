@@ -1,5 +1,6 @@
 import {Field} from './types';
 
+const PLAYER_START_FIELDS_NUMBER = 5;
 
 type PlayerCount = {
     fields: number;
@@ -11,42 +12,43 @@ type PlayerCount = {
 const default_field: Field = {
     id: null,
     owner: null,
-    isCounty: false
+    isCounty: false,
+    isActive: false
 }
 
-const default_tiles: boolean[][] = [
-    [false,false,false,false],
-    [false,false,false,false],
-    [false,false,false,false],
-    [false,false,false,false],
+const default_tiles:    (boolean| number)[][] = [
+    [2,false,false,false,2],
+    [2,false,false,false,false,false],
+    [false,false,false,false,false],
+    [2,false,false,false,false,false],
+    [2,false,2,false,2],
 ]
 
-const preparedMap: Field[][] = default_tiles.map( (row, i) => row.map( (tile, y) => ({...default_field, id: (String(i) + String(y))})) )
-console.log("preparedMap")
+const preparedMap: Field[][] = default_tiles.map( (row, i) => row.map( (tile, y) => (typeof(tile) === 'boolean' ? {...default_field, id: (String(i) + String(y)), isActive: true} : {...default_field, id: (String(i) + String(y))})) )
 console.log(preparedMap)
-
-
 const checkIfPlayerCanHaveMoreFields = (fields: number) => {
-    return fields < 5;
+    return fields < PLAYER_START_FIELDS_NUMBER;
 }
 
 const random = (): boolean => {
-    return( Math.floor(Math.random() * 10) > 5 ? true : false);
+    const tmp = ( Math.floor(Math.random() * 10) > 8 ? true : false)
+    console.log("________________tmp______________");
+    console.log(tmp);
+    return tmp;
 }
 
 const prepareField = (neighbours: Field[], current: Field, ownerId: number): void => {
-
-    console.log("%c neighbours", "background: white; color: black;")
-    console.log(neighbours)
-    const haveNeghbours  = neighbours.some( element => element.isCounty);
-    haveNeghbours ? current.isCounty = random() : current.isCounty = true;
-    if(current.isCounty){
-        current.owner = ownerId;
-    }
+        if(current.isActive){
+            const haveNeighbours  = neighbours.filter( element => element.isCounty);
+            haveNeighbours.length > 2 ? current.isCounty = random() : current.isCounty = true;
+            if(current.isCounty){
+                current.owner = ownerId;
+            }
+        }
 }
 
 
-export const generateMap = (players_count: number) => {
+export const generateMap = (players_count: number): Field[][] => {
 
     const playersState: PlayerCount[] = [];
     for(let z = 0; z <= players_count; z++){
@@ -56,30 +58,26 @@ export const generateMap = (players_count: number) => {
         })
     }
 
-    console.log(playersState);
+    let currentPlayer = 0;
+
+    for( let y = 0; y < default_tiles.length; y++){
+
+        const current_tile_row: Field[] = preparedMap[y];
+        console.log("%c current_tile_row", "background: blue;")
+        console.log(current_tile_row)
+
+        for( let k = 0; k < current_tile_row.length; k++){
 
 
-    for( let i = 0; i <= players_count; i++){
-
-            for( let y = 0; y < default_tiles.length; y++){
-
-                const current_tile_row: Field[] = preparedMap[y];
-
-                for( let k = 0; k < current_tile_row.length; k++){
-
-
-                if(checkIfPlayerCanHaveMoreFields(playersState[i].fields)){
-                    console.log("%c DOING ITERATION" + k, "background: red; color: aqua")
-                    console.log("%c CURRENT ITERATION", "background: pink; color: aqua")
-                    console.log("player: " + i,"row: " + y, "column: " + k)
-                    console.log("%c CURRENT OBJECT", "background: pink; color: aqua")
-                    console.log(current_tile_row[k])
+            if(currentPlayer <= players_count){
+                if(checkIfPlayerCanHaveMoreFields(playersState[currentPlayer].fields)){
+                    console.log("%c DOING ITERATION: [" + y + "]" + "[" + k + "]" + " PLAYER: " + currentPlayer , "background: red; color: aqua")
+                    console.log("player: " + currentPlayer,"row: " + y, "column: " + k)
                     console.log(preparedMap)
                     console.log("PLAYERS STATE")
                     console.log(playersState)
 
-                    const neighbours: Field[] = [
-                    ];
+                    const neighbours: Field[] = [];
 
                     if(y > 0){
 
@@ -113,18 +111,22 @@ export const generateMap = (players_count: number) => {
                     }
 
 
-                    prepareField( neighbours, preparedMap[y][k], i)
-                    console.log("____________________________________________")
+                    prepareField( neighbours.filter( n => n), preparedMap[y][k], currentPlayer)
+                    console.log("______PREPARED MAP_____")
                     console.log(preparedMap);
                     if(preparedMap[y][k].isCounty){
-                        playersState[i].fields += 1;
+                        playersState[currentPlayer].fields += 1;
+                    }
+                    if(playersState[currentPlayer].fields >= PLAYER_START_FIELDS_NUMBER){
+                        currentPlayer++;
                     }
                 }
-                }
+            }
         }
-}
+        }
     console.log("preparedMap")
     console.log(preparedMap)
+    return preparedMap;
 }
 
 

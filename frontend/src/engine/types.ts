@@ -15,6 +15,7 @@ export type Field ={
     id: string | null;
     owner: number | null;
     isCounty: boolean;
+    isActive: boolean;
 }
 
 export type Player = {
