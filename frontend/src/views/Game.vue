@@ -1,24 +1,25 @@
 <template>
-  <div class="home">
-    <img alt="Game Logo" src="../assets/logo.svg" />
-    <Menu />
-  </div>
+    <Map/>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Menu from "@/components/game/Map.vue"; // @ is an alias to /src
+import Map from "../components/game/Map.vue";
+import { generateMap } from '../engine/map'
 
 @Options({
   components: {
-    Menu,
+    Map,
   },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  mounted(){
+
+
+    generateMap(0)
+  }
+}
 </script>
 
 <style lang="scss">
-body{
-  background-color: #986393;
-}
 </style>

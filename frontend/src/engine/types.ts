@@ -1,8 +1,8 @@
-type Warior = {
+export type Warior = {
     health: number;
 }
 
-type County = {
+export type County = {
     id: number;
     name: string;
     citizens: number;
@@ -11,7 +11,13 @@ type County = {
     isActive: boolean;
 }
 
-type Player = {
+export type Field ={
+    id: string | null;
+    owner: number | null;
+    isCounty: boolean;
+}
+
+export type Player = {
     id: number;
     color: string;
     second_color: string;
@@ -25,7 +31,7 @@ type Player = {
     isActive: boolean;
 }
 
-type Combat = {
+export type Combat = {
     attacker: Player;
     defender: Player;
     turn: boolean; // false - attacker, true - defender
@@ -33,6 +39,6 @@ type Combat = {
 }
 
 
-type GameMap = {
+export type GameMap = {
     fields: County[];
 }
