@@ -49,3 +49,8 @@ export type Color = {
     main: string;
     second: string;
 }
+
+export type PlayerCount = {
+    fields: number;
+    id: number;
+}
