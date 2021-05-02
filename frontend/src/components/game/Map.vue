@@ -1,5 +1,5 @@
 <template>
-    <img class="game__background" alt="Game Field" src="../../assets/mainfield.svg" />
+    <img class="game__background" alt="Game Field" src="../../assets/mainfield.svg"/>
 </template>
 
 <script lang="ts">

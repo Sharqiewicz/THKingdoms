@@ -17,6 +17,7 @@ export type Field ={
     owner: number | null;
     isCounty: boolean;
     isActive: boolean;
+    neighbours?: Field[]
 }
 
 export type Player = {

@@ -8,18 +8,21 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import {Field} from "../engine/types";
 
 
 @Options({
   props: {
     main:String,
-    second:String
+    second:String,
+    selected: Array
   },
 })
 
 export default class CountyTile extends Vue {
     main!: string;
-    second!: string
+    second!: string;
+    selected!: Field[];
 }
 </script>
 

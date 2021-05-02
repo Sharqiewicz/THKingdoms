@@ -1,1 +1,1 @@
-export const PLAYER_START_FIELDS_NUMBER = 3;
+export const PLAYER_START_FIELDS_NUMBER = 4;
