@@ -43,9 +43,17 @@ const updateNeighbours = (map: Field[][]) => {
 
 const prepareField = (neighbours: Field[], current: Field, players: PlayerCount[], ownerId: number): void => {
 
+        console.log(players[0])
+        console.log(players[0].fields)
+
         if(current.isActive){
             if(players[ownerId].fields === 0){
-                current.isCounty = true;
+                if(Number(current.id) > 12){
+                    current.isCounty = true;
+                }
+                else{
+                    current.isCounty = random();
+                }
             }
             else{
                 const haveNeighbours = neighbours.filter( element => element.isCounty);
